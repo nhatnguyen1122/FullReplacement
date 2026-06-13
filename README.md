@@ -59,7 +59,7 @@ Set keys in the shell or a local `.env` file that is never committed:
 export NVIDIA_API_KEY="<your-nvidia-api-key>"
 ```
 
-In this checkout, most requested benchmark configs use NVIDIA's OpenAI-compatible endpoint. The CP26 baseline config (`examples/circle_packing/config_baseline.yaml`) currently has a Gemini block active; either set the key expected by that config or switch its active `llm:` block to the commented NVIDIA block before launching if all runs should use NVIDIA.
+The requested benchmark configs use NVIDIA's OpenAI-compatible endpoint. Keep `NVIDIA_API_KEY` in the environment rather than writing it into YAML files.
 
 ### Run Requested Baseline Experiments
 
