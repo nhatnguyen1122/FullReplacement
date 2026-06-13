@@ -1,0 +1,32 @@
+max_iterations: 100
+llm:
+  api_base: https://integrate.api.nvidia.com/v1
+  api_key: ${NVIDIA_API_KEY}
+  models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  evaluator_models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  temperature: 0.2
+  max_tokens: 4096
+  timeout: 600
+  retries: 3
+  retry_delay: 5
+  max_total_tokens: 5000000
+prompt:
+  system_message: "SETTING:\nYou are an expert in number theory, combinatorial optimization, and AI-driven mathematical discovery.\nYour task is to evolve and optimize a Python script to find a finite set of integers `U` that provides a new, world-record **lower bound** for the constant C\u2086.\n\nPROBLEM CONTEXT:\nTarget: Find a finite set `U` of non-negative integers (containing 0) that **maximizes** the objective function:\nC6(U) = 1 + log(|U-U| / |U+U|) / log(2*max(U) + 1)\n\nThis maximum value provides a tight lower bound for the constant C6.\n\nCurrent best known lower bound: C6 \u2265 1.158417281556896\nGoal: Find a set `U` that results in a C6 value greater than 1.158417281556896.\n\nPERFORMANCE METRICS:\n- c6_bound: Bound found.\n- combined_score: c6_bound/1.158417281556896 (The primary objective is to MAXIMIZE this value - a value > 1 means a new record).\n- set_size: size of the set U.\n- max_val: max value in the set U.\n- eval_time: evaluation time of the main program.\n\n\
+    VALIDATION FRAMEWORK:\n- The evaluation script re-computes the C6 value using standard NumPy set operations and verifies the constraints on `U`.\n"
+  num_top_programs: 3
+  use_template_stochasticity: true
+database:
+  population_size: 60
+  archive_size: 25
+  num_islands: 4
+evaluator:
+  timeout: 600
+  max_retries: 3
+  parallel_evaluations: 4
+diff_based_evolution: true
+search:
+  strategy: island_map_elites

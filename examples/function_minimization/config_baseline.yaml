@@ -1,0 +1,63 @@
+# Baseline config override for Function Minimization
+# Identical settings to config_mcts.yaml but with default island_map_elites strategy
+max_iterations: 50
+
+# llm:
+#   provider: "codestral"
+#   primary_model: "codestral-latest"
+#   primary_model_weight: 1.0
+#   api_base: "https://api.mistral.ai/v1"
+#   temperature: 0.7
+#   max_tokens: 16000
+#   timeout: 120
+#   max_total_tokens: 5000000
+
+# llm:
+#   api_base: "https://integrate.api.nvidia.com/v1"
+#   api_key: ${NVIDIA_API_KEY}
+#   models:
+#     - name: "openai/gpt-oss-120b"
+#       weight: 1.0
+#   evaluator_models:
+#     - name: "openai/gpt-oss-120b"
+#       weight: 1.0
+#   temperature: 0.2
+#   max_tokens: 4096
+#   timeout: 600
+#   retries: 3
+#   retry_delay: 5
+#   max_total_tokens: 5000000
+
+llm:
+  api_base: "https://integrate.api.nvidia.com/v1"
+  api_key: ${NVIDIA_API_KEY}
+  models:
+    - name: "openai/gpt-oss-120b"
+      weight: 1.0
+  evaluator_models:
+    - name: "openai/gpt-oss-120b"
+      weight: 1.0
+  temperature: 0.2
+  max_tokens: 4096
+  timeout: 600
+  retries: 3
+  retry_delay: 5
+  max_total_tokens: 5000000
+
+prompt:
+  system_message: "You are an expert programmer specializing in optimization algorithms. Your task is to improve a function minimization algorithm to find the global minimum of a complex function with many local minima. The function is f(x, y) = sin(x) * cos(y) + sin(x*y) + (x^2 + y^2)/20. Focus on improving the search_algorithm function to reliably find the global minimum, escaping local minima that might trap simple algorithms."
+
+database:
+  population_size: 50
+  archive_size: 20
+  num_islands: 3
+
+evaluator:
+  timeout: 60
+  parallel_evaluations: 3
+
+diff_based_evolution: true
+max_code_length: 20000
+
+search:
+  strategy: "island_map_elites"

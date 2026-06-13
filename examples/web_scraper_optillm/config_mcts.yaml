@@ -1,0 +1,80 @@
+max_iterations: 100
+checkpoint_interval: 10
+parallel_evaluations: 1
+llm:
+  api_base: http://localhost:8000/v1
+  api_key: ${OPTILLM_API_KEY}
+  models:
+  - name: readurls-Qwen/Qwen3-1.7B-MLX-bf16
+    weight: 0.9
+  - name: moa&readurls-Qwen/Qwen3-1.7B-MLX-bf16
+    weight: 0.1
+  temperature: 0.6
+  max_tokens: 16000
+  top_p: 0.95
+  timeout: 600
+  retries: 3
+  retry_delay: 5
+  max_total_tokens: 5000000
+database:
+  population_size: 50
+  num_islands: 3
+  migration_interval: 10
+  feature_dimensions:
+  - score
+  - complexity
+evaluator:
+  timeout: 300
+  max_retries: 3
+  cascade_evaluation: false
+prompt:
+  system_message: 'You are an expert Python developer tasked with evolving a web scraper
+    for API documentation.
+
+
+    Your goal is to improve the scraper''s ability to extract function signatures,
+    parameters, and descriptions
+
+    from HTML documentation pages. The scraper should be robust and handle various
+    documentation formats.
+
+
+    Key considerations:
+
+    1. Parse HTML efficiently using BeautifulSoup
+
+    2. Extract function names, signatures, and descriptions accurately
+
+    3. Handle different documentation structures (Python docs, library docs, etc.)
+
+    4. Provide meaningful error handling
+
+    5. Return structured data in the expected format
+
+
+    When analyzing documentation structures, refer to actual documentation pages like:
+
+    - https://docs.python.org/3/library/json.html
+
+    - https://requests.readthedocs.io/en/latest/api/
+
+    - https://www.crummy.com/software/BeautifulSoup/bs4/doc/
+
+
+    Focus on improving the EVOLVE-BLOCK sections to make the scraper more accurate
+    and robust.
+
+    Consider multiple parsing strategies and implement the most effective approach.
+
+    '
+  num_top_programs: 3
+  num_diverse_programs: 2
+log_level: INFO
+search:
+  strategy: tree_qd_mcts
+  exploration_constant: 0.7
+  qd_weight: 0.5
+  max_tree_depth: 15
+  backup: mixed
+  backup_alpha: 0.5
+  widening_alpha: 0.5

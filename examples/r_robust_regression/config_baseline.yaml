@@ -1,0 +1,47 @@
+max_iterations: 100
+checkpoint_interval: 10
+log_level: INFO
+file_suffix: .r
+llm:
+  primary_model: codestral-latest
+  primary_model_weight: 1.0
+  api_base: https://api.mistral.ai/v1
+  temperature: 0.8
+  max_tokens: 4096
+  system_message: 'You are an expert statistician and R programmer specializing in
+    robust regression methods.
+
+    Focus on improving the algorithm''s ability to handle outliers while maintaining
+    accuracy.
+
+    Consider techniques like Huber regression, RANSAC, M-estimators, and other robust
+    methods.
+
+    Ensure the R code is efficient and follows best practices.
+
+    '
+  provider: codestral
+  max_total_tokens: 5000000
+prompt:
+  num_top_programs: 3
+  num_diverse_programs: 2
+  include_artifacts: true
+  max_artifact_bytes: 4096
+database:
+  population_size: 100
+  num_islands: 3
+  feature_dimensions:
+  - score
+  - outlier_robustness
+  - execution_time
+  feature_bins: 5
+evaluator:
+  timeout: 30
+  parallel_evaluations: 2
+  cascade_evaluation: true
+  cascade_thresholds:
+  - 0.3
+  - 0.6
+  - 0.8
+search:
+  strategy: island_map_elites

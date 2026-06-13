@@ -1,0 +1,61 @@
+max_iterations: 1
+checkpoint_interval: 1
+log_level: "INFO"
+random_seed: 42
+
+diff_based_evolution: true
+max_code_length: 20000
+
+llm:
+  provider: "codestral"
+  api_base: "https://api.mistral.ai/v1"
+  temperature: 0.7
+  top_p: 0.95
+  max_tokens: 4096
+  timeout: 120
+  retries: 1
+  retry_delay: 2
+  track_token_usage: true
+  max_total_tokens: 100000
+  models:
+    - provider: "codestral"
+      name: "codestral-latest"
+      weight: 1.0
+  evaluator_models:
+    - provider: "codestral"
+      name: "codestral-latest"
+      weight: 1.0
+
+prompt:
+  system_message: "You are an expert programmer improving a compact optimization program. Return a precise SEARCH/REPLACE diff."
+  num_top_programs: 2
+  num_diverse_programs: 1
+
+database:
+  population_size: 20
+  archive_size: 10
+  search_strategy: "tree_qd_mcts"
+  num_islands: 1
+  feature_dimensions:
+    - "complexity"
+    - "diversity"
+
+evaluator:
+  timeout: 60
+  parallel_evaluations: 1
+
+search:
+  strategy: "tree_qd_mcts"
+  exploration_constant: 0.7
+  qd_weight: 0.5
+  max_tree_depth: 10
+  backup: "mixed"
+  backup_alpha: 0.5
+  widening_alpha: 0.5
+  w_quality: 0.3
+  w_delta: 0.2
+  w_cell_new: 0.2
+  w_cell_improved: 0.15
+  w_novelty: 0.05
+  w_invalid: 0.1
+  w_cost: 0.0

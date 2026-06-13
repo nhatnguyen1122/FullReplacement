@@ -1,0 +1,38 @@
+max_iterations: 100
+llm:
+  api_base: https://integrate.api.nvidia.com/v1
+  api_key: ${NVIDIA_API_KEY}
+  models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  evaluator_models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  temperature: 0.2
+  max_tokens: 4096
+  timeout: 600
+  retries: 3
+  retry_delay: 5
+  max_total_tokens: 5000000
+prompt:
+  system_message: "SETTING:\nYou are an expert in harmonic analysis, numerical optimization, and AI-driven mathematical discovery.\nYour task is to evolve and optimize a Python script to find a better **upper bound** for the uncertainty inequality constant C\u2084.\n\nPROBLEM CONTEXT:\nTarget: Find an even function f(x) that **minimizes** the product A(f)A(f\u0302), where A(f) is the largest positive root of f.\nThis minimal product provides a tight upper bound for the constant C\u2084.\n\nCurrent best known upper bound: C\u2084 \u2264 0.3215872333529007\nGoal: Find a set of coefficients for a test function that results in a C\u2084 value lower than 0.3215872333529007.\n\nMETHOD:\nThe test function is parameterized as f(x) = P(x)exp(-\u03C0x\xB2), where P(x) is a linear combination of even Hermite polynomials: P(x) = c\u2080H\u2080(x) + c\u2081H\u2084(x) + c\u2082H\u2088(x) + ...\nThe problem simplifies to finding coefficients [c\u2080, c\u2081, c\u2082, ...] that minimize the largest positive\
+    \ root of P(x), subject to the constraint P(0) = 0.\nThe final C\u2084 bound is the square of this minimal root, (r_max)\xB2.\n\nPERFORMANCE METRICS:\n- c4_bound: bound found by the algorithm.\n- combined_score: 0.3215872333529007 / c4_bound (The primary objective is to MAXIMIZE this value - a value > 1 means a new record).\n- r_max: largest positive root found.\n- coeffs: coefficients found in the optimization.\n- eval_time: evaluation time of the script.\n\nVALIDATION FRAMEWORK:\n- The evaluation script reconstructs the polynomial from the discovered coefficients and uses `numpy.roots` to independently verify the largest positive root and the C4 bound.\n- It also checks the problem constraints (P(0)=0 and the positivity of the highest-order coefficient).\n"
+  num_top_programs: 3
+  use_template_stochasticity: true
+database:
+  population_size: 60
+  archive_size: 25
+  num_islands: 4
+evaluator:
+  timeout: 600
+  max_retries: 3
+  parallel_evaluations: 4
+diff_based_evolution: true
+search:
+  strategy: tree_qd_mcts
+  exploration_constant: 0.7
+  qd_weight: 0.5
+  max_tree_depth: 15
+  backup: mixed
+  backup_alpha: 0.5
+  widening_alpha: 0.5

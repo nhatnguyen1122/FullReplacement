@@ -1,0 +1,81 @@
+Configure it in the benchmark config files, not in the command.
+
+  For scripts/run_benchmark_matrix.py, each run uses:
+
+  examples/<problem>/config_baseline.yaml
+  examples/<problem>/config_mcts.yaml
+
+  Then it copies those into:
+
+  <output-root>/configs/<benchmark>_<strategy>_run_XX.yaml
+
+  and only injects seed/iterations/token budget. It does not currently have a --provider gemini or
+  --provider gpt flag.
+
+  For example, for webscrape, edit both:
+
+  examples/web_scraper_optillm/config_baseline.yaml
+  examples/web_scraper_optillm/config_mcts.yaml
+
+  For cp_art, edit both:
+
+  examples/circle_packing_with_artifacts/config_baseline.yaml
+  examples/circle_packing_with_artifacts/config_mcts.yaml
+
+  Gemini API
+  Use this llm: block:
+
+  llm:
+    provider: gemini
+    primary_model: gemini-2.5-flash
+    primary_model_weight: 1.0
+    temperature: 0.7
+    max_tokens: 4096
+    timeout: 600
+    retries: 3
+    retry_delay: 5
+    max_total_tokens: 5000000
+
+  Then run with:
+
+  PYTHONPATH="$PWD" GEMINI_API_KEY="your_key" python scripts/run_benchmark_matrix.py \
+    --runs 1 \
+    --benchmarks cp_art \
+    --strategies baseline,mcts \
+    --output-root output/cp_art_gemini_test \
+    --iterations 25 \
+    --fail-fast
+
+  The repo maps provider: gemini to:
+
+  https://generativelanguage.googleapis.com/v1beta/openai/
+
+  and reads GEMINI_API_KEY or GOOGLE_API_KEY.
+
+  OpenAI/GPT API
+  Use this llm: block:
+
+  llm:
+    provider: openai
+    primary_model: gpt-4.1
+    primary_model_weight: 1.0
+    temperature: 0.7
+    max_tokens: 4096
+    timeout: 600
+    retries: 3
+    retry_delay: 5
+    max_total_tokens: 5000000
+
+  Then run with:
+
+  PYTHONPATH="$PWD" OPENAI_API_KEY="your_key" python scripts/run_benchmark_matrix.py \
+    --runs 1 \
+    --benchmarks cp_art \
+    --strategies baseline,mcts \
+    --output-root output/cp_art_gpt_test \
+    --iterations 25 \
+    --fail-fast
+
+  One important caveat: if config_baseline.yaml / config_mcts.yaml do not exist yet,
+  run_benchmark_matrix.py auto-generates them as Codestral configs. So create/edit those two files
+  first, then run the matrix.

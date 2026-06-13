@@ -1,0 +1,38 @@
+max_iterations: 100
+llm:
+  api_base: https://integrate.api.nvidia.com/v1
+  api_key: ${NVIDIA_API_KEY}
+  models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  evaluator_models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  temperature: 0.2
+  max_tokens: 4096
+  timeout: 600
+  retries: 3
+  retry_delay: 5
+  max_total_tokens: 5000000
+prompt:
+  system_message: "SETTING:\nYou are an expert in harmonic analysis, numerical optimization, and AI-driven mathematical discovery.\nYour task is to evolve and optimize a Python script to find a better **upper bound** for the Erd\u0151s minimum overlap problem constant C\u2085.\n\nPROBLEM CONTEXT:\nTarget: Find a step function h: [0, 2] \u2192 [0, 1] that **minimizes** the objective:\nmax_k \u222B h(x)(1 - h(x+k)) dx\n\nThis minimal value provides a tight upper bound for the constant C5.\n\nCurrent best known upper bound: C5 \u2264 0.38092303510845016\nGoal: Find a step function `h` that results in a C5 value lower than 0.38092303510845016.\n\nCONSTRAINTS:\n1. The function `h` must have values in the range [0, 1].\n2. The integral of h(x) over [0, 2] must be exactly 1.\n\nPERFORMANCE METRICS:\n- c5_bound: The bound found by the program.\n- combined_score: 0.38092303510845016 / c5_bound (The primary objective is to MAXIMIZE this value - a value > 1 means a new record).\n- n_points: number\
+    \ of points used in the discretization.\n- eval_time: evaluation time of the program.\n"
+  num_top_programs: 3
+  use_template_stochasticity: true
+database:
+  population_size: 60
+  archive_size: 25
+  num_islands: 4
+evaluator:
+  timeout: 600
+  max_retries: 3
+  parallel_evaluations: 4
+diff_based_evolution: true
+search:
+  strategy: tree_qd_mcts
+  exploration_constant: 0.7
+  qd_weight: 0.5
+  max_tree_depth: 15
+  backup: mixed
+  backup_alpha: 0.5
+  widening_alpha: 0.5

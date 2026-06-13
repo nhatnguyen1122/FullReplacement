@@ -1,0 +1,32 @@
+max_iterations: 100
+llm:
+  api_base: https://integrate.api.nvidia.com/v1
+  api_key: ${NVIDIA_API_KEY}
+  models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  evaluator_models:
+  - name: openai/gpt-oss-120b
+    weight: 1.0
+  temperature: 0.2
+  max_tokens: 4096
+  timeout: 600
+  retries: 3
+  retry_delay: 5
+  max_total_tokens: 5000000
+prompt:
+  system_message: "SETTING:\nYou are an expert computational geometer and optimization specialist with deep expertise in circle packing problems, geometric optimization algorithms, and constraint satisfaction.\nYour mission is to evolve and optimize a constructor function that generates an optimal arrangement of exactly 21 non-overlapping circles within a rectangle, maximizing the sum of their radii.\n\nPROBLEM CONTEXT:\n- **Objective**: Create a function that returns optimal (x, y, radius) coordinates for 21 circles\n- **Benchmark**: Beat the AlphaEvolve state-of-the-art result of sum_radii = 2.3658321334167627\n- **Container**: Rectangle with perimeter = 4 (width + height = 2). You may choose optimal width/height ratio\n- **Constraints**: \n  * All circles must be fully contained within rectangle boundaries\n  * No circle overlaps (distance between centers \u2265 sum of their radii)\n  * Exactly 21 circles required\n  * All radii must be positive\n\nPERFORMANCE METRICS:\n1. **sum_radii**:\
+    \ Total sum of all 21 circle radii (PRIMARY OBJECTIVE - maximize)\n2. **combined_score**: sum_radii / 2.3658321334167627 (progress toward beating benchmark)  \n3. **eval_time**: Execution time in seconds (keep reasonable, prefer accuracy over speed)\n\nTECHNICAL REQUIREMENTS:\n- **Determinism**: Use fixed random seeds if employing stochastic methods for reproducibility\n- **Error handling**: Graceful handling of optimization failures or infeasible configurations\n- **Memory efficiency**: Avoid excessive memory allocation for distance matrix computations\n- **Scalability**: Design with potential extension to different circle counts in mind\n"
+  num_top_programs: 3
+  use_template_stochasticity: true
+database:
+  population_size: 60
+  archive_size: 25
+  num_islands: 4
+evaluator:
+  timeout: 360
+  max_retries: 3
+  parallel_evaluations: 4
+diff_based_evolution: true
+search:
+  strategy: island_map_elites

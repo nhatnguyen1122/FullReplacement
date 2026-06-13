@@ -1,0 +1,44 @@
+max_iterations: 150
+checkpoint_interval: 15
+log_level: INFO
+file_suffix: .rs
+llm:
+  primary_model: codestral-latest
+  primary_model_weight: 1.0
+  api_base: https://api.mistral.ai/v1
+  temperature: 0.7
+  max_tokens: 16384
+  system_message: 'You are an expert Rust systems programmer specializing in high-performance
+    algorithms.
+
+    Focus on creating adaptive sorting algorithms that can handle different data patterns
+    efficiently.
+
+    Consider hybrid approaches like introsort, adaptive pivot selection, and data-aware
+    optimizations.
+
+    Ensure memory safety and idiomatic Rust code. Use appropriate data structures
+    and leverage Rust''s zero-cost abstractions.
+
+    '
+  provider: codestral
+  max_total_tokens: 5000000
+prompt:
+  num_top_programs: 4
+  num_diverse_programs: 3
+  include_artifacts: true
+  max_artifact_bytes: 8192
+database:
+  population_size: 150
+  num_islands: 4
+  feature_dimensions:
+  - score
+  - performance_score
+  - adaptability_score
+  feature_bins: 8
+evaluator:
+  timeout: 60
+  parallel_evaluations: 3
+  cascade_evaluation: false
+search:
+  strategy: island_map_elites
