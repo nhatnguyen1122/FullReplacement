@@ -59,6 +59,7 @@ _KEY_ALIASES: Dict[str, str] = {
     "third_autocorr_ineq": "auto3",
     "uncertainty_ineq": "uncert",
     "signal_processing": "sp",
+    "signal_processing_skydiscover": "sp_sky",
     "k_module_problem": "kmod",
     "circle_packing_with_artifacts": "cp_art",
     "tsp_tour_minimization": "tsp",

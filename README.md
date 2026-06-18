@@ -27,7 +27,8 @@
 
 Use this section to run only the requested OpenEvolve baseline experiments:
 
-- signal processing (`sp`)
+- OpenEvolve-parity signal processing (`sp`)
+- native SkyDiscover signal processing (`sp_sky`, optional when comparing against SkyDiscover's native SP evaluator)
 - circle packing 26 (`cp`)
 - circle packing 32 (`cp32`)
 - circle packing rectangle (`cprect`)
@@ -79,6 +80,18 @@ python scripts/run_benchmark_matrix.py \
 Notes:
 
 - `baseline` means the original OpenEvolve island MAP-Elites baseline, not TreeQD-MCTS.
+- `sp` is the OpenEvolve-parity signal-processing benchmark.
+- `sp_sky` is the native SkyDiscover signal-processing benchmark. Run it separately or add it to `--benchmarks` when you want SkyDiscover-native SP results:
+  ```bash
+  python scripts/run_benchmark_matrix.py \
+    --runs 5 \
+    --benchmarks sp_sky \
+    --strategies baseline \
+    --iterations 300 \
+    --max-total-tokens 20000000 \
+    --output-root output/server_baseline_sp_sky_5runs_300iter_20mtok \
+    --resume
+  ```
 - `--max-total-tokens 20000000` sets `llm.max_total_tokens` in each generated run config.
 - `--resume` skips/reuses completed run directories when rerunning the same command.
 - Use `--fail-fast` if the server should stop on the first failed run.
